@@ -1,18 +1,21 @@
+
+
 {% extends 'base.html' %}
+{% block title %}
+Edit Data
+{% endblock %}
+
 {% block content %}
-<h3> Изменение дата центра: {{ data.id }}</h3>
-<form method="POST">
-    {{ data.id }}
-    <input type="text" name="name_data" value="{{ data.name_data }}">
-    <input type="text" name="place_conutry" value="{{ data.place_conutry }}">
-    <input type="text" name="place_city" value="{{ data.place_city}}">
-    <input type="text" name="slot_servers" value="{{ data.slot_servers}}">
-    <input type="text" name="data_tier" value="{{ data.data_tier}}">
-    <a href="">сервера</a></td>
-    <a href=" ">удалить</a></td>
-    <input type="submit" value="обновить">
-</form>
-
-
-
+<div class="col-md-6">
+    <h1>Create new Data center</h1>
+    <form method="POST">
+        {% for field in form %}
+        <div class="form-group">
+        {{ field.label(class='control-label') }}
+        {{ field(class='form-control') }}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Изменить</button>
+    </form>
+</div>
 {% endblock %}

@@ -20,26 +20,26 @@ class Data(db.Model):
     slot_servers = db.Column(db.Integer, nullable=False)
     data_tier = db.Column(db.Integer, nullable=False)
 
-    servers = db.relationship('Server', backref='data') # у серверов обращаться по имени data server = Servers(name='c3p0', data=anthony) где anthony обьект Data
+    servers = db.relationship('Server', backref='data', cascade='all, delete-orphan', lazy='dynamic') # у серверов обращаться по имени data server = Servers(name='c3p0', data=anthony) где anthony обьект Data
 
-    # def __repr__(self):
-    #     return '<data {} id={} >'.format(self.name_data, self.id)
+    def __repr__(self):
+        return '<data {} id={} >'.format(self.name_data, self.id)
 
 
 class Server(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    # name_server = db.Column(db.String(100), nullable=False)
-    # manufacturer = db.Column(db.String(100), nullable=False)
-    # model_server = db.Column(db.String(100), nullable=False)
-    # serial_number = db.Column(db.String(100), nullable=False)
+    name_server = db.Column(db.String(100), nullable=False)
+    manufacturer = db.Column(db.String(100), nullable=False)
+    model_server = db.Column(db.String(100), nullable=False)
+    serial_number = db.Column(db.String(100), nullable=False)
     os = db.Column(db.String(100), nullable=False)
 
-    data_id = db.Column(db.Integer, db.ForeignKey('data.id'))
+    data_id = db.Column(db.Integer, db.ForeignKey('data.id'), nullable=False)
 
 
 
-    # def __repr__(self):
-    #     return '<server {} id={} >'.format(self.name_server, self.id)
+    def __repr__(self):
+        return '<server {} id={} >'.format(self.name_server, self.id)
 
 
 #  view
@@ -50,15 +50,20 @@ def index():
 
 
 @app.route('/data/<id>/edit/', methods=['GET', 'POST'])
+
+
+@app.route('/data/<id>/edit/', methods=['GET', 'POST'])
 def data_edit(id):
     data = Data.query.filter_by(id=id).first()
     if not data:
         abort(404)
     if request.method == 'POST': #  принимаем достаем данные и перерисовываем страницу
-        data.name_data = request.form['name_data']
+        form = DataForm(formdata=request.form, obj=data)
+        form.populate_obj(data)
         db.session.commit()
-        return render_template('data_edit.html', data=data)
-    return render_template('data_edit.html', data=data)
+        return redirect(url_for('index'))
+    form = DataForm(obj=data)
+    return render_template('data_edit.html', form=form)
 
 
 @app.route('/data/<id>/delete/', methods=['GET', 'POST'])
