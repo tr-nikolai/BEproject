@@ -1,11 +1,13 @@
-from flask import Flask, render_template, request, abort, url_for
+from flask import Flask, render_template, request, abort, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
+from forms import DataForm
 
 
 #  config
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///testes.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'DontTellAnyone'
 db = SQLAlchemy(app)
 
 
@@ -18,10 +20,10 @@ class Data(db.Model):
     slot_servers = db.Column(db.Integer, nullable=False)
     data_tier = db.Column(db.Integer, nullable=False)
 
-    servers = db.relationship('Server', backref='data') # у серверов обращаться по имени data server = Servers(name='c3p0', data=anthony) где anthony обьект Data
+    servers = db.relationship('Server', backref=db.backref('data', cascade='all,delete'), lazy='dynamic') # у серверов обращаться по имени data server = Servers(name='c3p0', data=anthony) где anthony обьект Data
 
     def __repr__(self):
-        return '<data {} id = {} >'.format(self.name_data, self.id)
+        return '<data {} id={} >'.format(self.name_data, self.id)
 
 
 class Server(db.Model):
@@ -34,9 +36,13 @@ class Server(db.Model):
 
     data_id = db.Column(db.Integer, db.ForeignKey('data.id'))
 
+    # data_id = db.Column(db.Integer, db.ForeignKey('data.id'))
+    # data = db.relationship(Data, backref=db.backref('server', ))
+
 
     def __repr__(self):
-        return '<server {} >'.format(self.name_server)
+        return '<server {} id={} >'.format(self.name_server, self.id)
+
 
 #  view
 @app.route('/', methods=['GET'])
@@ -52,15 +58,38 @@ def data_edit(id):
         abort(404)
     if request.method == 'POST': #  принимаем достаем данные и перерисовываем страницу
         data.name_data = request.form['name_data']
-        print(request.form)
         db.session.commit()
         return render_template('data_edit.html', data=data)
     return render_template('data_edit.html', data=data)
 
 
+@app.route('/data/<id>/delete/', methods=['GET', 'POST'])
+def data_delete(id):
+    data = Data.query.filter_by(id=id).first()
+    if not data:
+        abort(404)
+    db.session.delete(data)
+    db.session.commit()
+    return redirect(url_for('index'))
+
+
 @app.route('/data/create', methods=['GET', 'POST'])
-def data_create():   #  создание дата центра
-    return None
+def create_data():
+    if request.method == 'POST':
+        # print(request.form)
+        try:
+            data = Data(name_data=request.form['name_data'],
+                        place_conutry = request.form['place_conutry'],
+                        place_city = request.form['place_city'],
+                        slot_servers = request.form['slot_servers'],
+                        data_tier = request.form['data_tier'])
+            db.session.add(data)
+            db.session.commit()
+        except:
+            print('что-то не так')
+        return redirect(url_for('index'))
+    form = DataForm()
+    return render_template('create_data.html', form=form)
 
 
 

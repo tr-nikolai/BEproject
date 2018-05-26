@@ -24,7 +24,7 @@
         <td><a href="">сервера</a></td>
         <!--<td><a href="/data/{{ item.id }}/edit">редактировать</a></td>-->
         <td><a href="{{ url_for('data_edit', id=item.id) }}">редактировать</a></td>
-        <td><a href=" ">удалить</a></td>
+        <td><a href="{{ url_for('data_delete', id=item.id) }}">удалить</a></td>
     </tr>
     {% endfor %}
 

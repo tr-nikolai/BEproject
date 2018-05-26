@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}
+Create new Data
+{% endblock %}
+
+{% block content %}
+<div class="col-md-6">
+    <h1>Create new Data center</h1>
+    <form action="{{ url_for('create_data') }}" method="POST">
+        {% for field in form %}
+        <div class="form-group">
+        {{ field.label(class='control-label') }}
+        {{ field(class='form-control') }}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary"> Создать</button>
+    </form>
+</div>
+{% endblock %}
