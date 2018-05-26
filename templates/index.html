@@ -1,10 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <p> hey</p>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+<h3> Таблица дата центров.</h3>
+<table class="table">
+    <tr>
+        <th>id</th>
+        <th>имя</th>
+        <th>страна</th>
+        <th>город</th>
+        <th>кол-во слотов</th>
+        <th>уровень</th>
+        <th>Сервера</th>
+        <th>редактировать</th>
+        <th>удалить</th>
+    </tr>
+    {% for item in data %}
+    <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.name_data }}</td>
+        <td>{{ item.place_conutry }}</td>
+        <td>{{ item.place_city}}</td>
+        <td>{{ item.slot_servers}}</td>
+        <td>{{ item.data_tier }}</td>
+        <td><a href="">сервера</a></td>
+        <!--<td><a href="/data/{{ item.id }}/edit">редактировать</a></td>-->
+        <td><a href="{{ url_for('data_edit', id=item.id) }}">редактировать</a></td>
+        <td><a href=" ">удалить</a></td>
+    </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}

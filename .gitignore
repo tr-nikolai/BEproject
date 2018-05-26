@@ -1,4 +1,4 @@
 .idex/
 .idea/
 __pycache__
-
+*.db
