@@ -21,7 +21,7 @@
         <td>{{ item.place_city}}</td>
         <td>{{ item.slot_servers}}</td>
         <td>{{ item.data_tier }}</td>
-        <td><a href="">сервера</a></td>
+        <td><a href="{{ url_for('servers_data', id=item.id) }}">сервера</a></td>
         <!--<td><a href="/data/{{ item.id }}/edit">редактировать</a></td>-->
         <td><a href="{{ url_for('data_edit', id=item.id) }}">редактировать</a></td>
         <td><a href="{{ url_for('data_delete', id=item.id) }}">удалить</a></td>

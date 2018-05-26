@@ -101,5 +101,13 @@ def all_servers():
     return render_template('servers.html', servers=servers)
 
 
+@app.route('/servers/<id>', methods=['GET'])
+def servers_data(id):
+    servers = Server.query.filter_by(data_id=id)
+    data = Data.query.filter_by(id=id).first()
+    if servers:
+        return render_template('servers.html', servers=servers)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
