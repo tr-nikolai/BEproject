@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3> Дата центры:</h3>
+<table class="table">
+    <tr>
+        <th>№</th>
+        <th>Название сервера</th>
+        <th>Производитель</th>
+        <th>модель</th>
+        <th>Серийный номер</th>
+        <th>Операционная система</th>
+        <th>№ дата центра</th>
+
+    </tr>
+    {% for item in servers %}
+    <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.name_server }}</td>
+        <td>{{ item.manufacturer }}</td>
+        <td>{{ item.model_server}}</td>
+        <td>{{ item.serial_number}}</td>
+        <td>{{ item.os }}</td>
+        <td><a href="{{ url_for('data_edit', id=item.data_id) }}">{{ item.data_id }}</a></td>
+
+    </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}

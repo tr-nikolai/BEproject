@@ -95,6 +95,10 @@ def create_data():
     return render_template('create_data.html', form=form)
 
 
+@app.route('/servers', methods=['GET'])
+def all_servers():
+    servers = Server.query.all()
+    return render_template('servers.html', servers=servers)
 
 
 if __name__ == '__main__':
