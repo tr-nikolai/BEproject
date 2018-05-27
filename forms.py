@@ -16,4 +16,4 @@ class ServerForm(Form):
     model_server = StringField(label='модель')
     serial_number = StringField(label='серийные номер')
     os = StringField(label='операционная система')
-    data = IntegerField(label='id дата центра')
+    data = StringField(label='№ дата центра')

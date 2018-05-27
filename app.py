@@ -23,7 +23,7 @@ class Data(db.Model):
     servers = db.relationship('Server', backref='data', cascade='all, delete-orphan', lazy='dynamic') # у серверов обращаться по имени data server = Servers(name='c3p0', data=anthony) где anthony обьект Data
 
     def __repr__(self):
-        return '<data {} id={} >'.format(self.name_data, self.id)
+        return  str(self.id)
 
 
 class Server(db.Model):
@@ -138,6 +138,30 @@ def create_server():
         return redirect(url_for('all_servers'))
     form = ServerForm()
     return render_template('create_server.html', form=form)
+
+
+@app.route('/server/<id>/edit/', methods=['GET', 'POST'])
+def server_edit(id):
+    server = Server.query.filter_by(id=id).first()
+    if not server:
+        abort(404)
+    if request.method == 'POST':
+        try:
+            data = Data.query.filter_by(id=request.form['data']).all()[0]
+        except IndexError:
+            info = 'Нет такого Дата центра'
+            return render_template('teh_info.html', info=info)
+
+        server.name_server = request.form['name_server']
+        server.manufacturer = request.form['manufacturer']
+        server.model_server = request.form['model_server']
+        server.serial_number = request.form['serial_number']
+        server.os = request.form['os']
+        server.data = data
+        db.session.commit()
+        return redirect(url_for('all_servers'))
+    form = ServerForm(obj=server)
+    return render_template('server_edit.html', form=form)
 
 
 if __name__ == '__main__':

@@ -13,6 +13,7 @@
         <th>Серийный номер</th>
         <th>Операционная система</th>
         <th>№ дата центра</th>
+        <th>Редактировать</th>
         <th>Удалить сервер</th>
 
     </tr>
@@ -25,6 +26,7 @@
         <td>{{ item.serial_number}}</td>
         <td>{{ item.os }}</td>
         <td><a href="{{ url_for('data_edit', id=item.data_id) }}">----- {{ item.data_id }} -----</a></td>
+        <td><a href="{{ url_for('server_edit', id=item.id) }}">Редактировать</a></td>
         <td><a href="{{ url_for('server_delete', id=item.id) }}">Удалить</a></td>
     </tr>
     {% endfor %}
