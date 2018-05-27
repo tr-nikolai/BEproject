@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}
-Добавить дата центр:
+Добавить сервер:
 {% endblock %}
 
 {% block content %}
 <div class="col-md-6">
-    <h1>Добавить новый дата центр:</h1>
-    <form action="{{ url_for('create_data') }}" method="POST">
+    <h1>Добавить сервер:</h1>
+    <form action="{{ url_for('create_server') }}" method="POST">
         {% for field in form %}
         <div class="form-group">
         {{ field.label(class='control-label' ) }}

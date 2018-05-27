@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
+{% block title %}
+Серверы.
+{% endblock %}
 {% block content %}
-<h3> Servers:</h3>
+<h1> Все серверы:</h1>
 <table class="table">
     <tr>
         <th>№</th>
@@ -10,6 +13,7 @@
         <th>Серийный номер</th>
         <th>Операционная система</th>
         <th>№ дата центра</th>
+        <th>Удалить сервер</th>
 
     </tr>
     {% for item in servers %}
@@ -20,10 +24,10 @@
         <td>{{ item.model_server}}</td>
         <td>{{ item.serial_number}}</td>
         <td>{{ item.os }}</td>
-        <td><a href="{{ url_for('data_edit', id=item.data_id) }}">{{ item.data_id }}</a></td>
-
+        <td><a href="{{ url_for('data_edit', id=item.data_id) }}">----- {{ item.data_id }} -----</a></td>
+        <td><a href="{{ url_for('server_delete', id=item.id) }}">Удалить</a></td>
     </tr>
     {% endfor %}
-
 </table>
+<a class="btn btn-primary" href="{{ url_for('create_server') }}">Добавить сервер</a>
 {% endblock %}

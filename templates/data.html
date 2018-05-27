@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
+{% block title %}
+Дата центры.
+{% endblock %}
 {% block content %}
-<h3> Дата центры:</h3>
+<h1> Все дата центры:</h1>
 <table class="table">
     <tr>
         <th>№</th>
@@ -9,7 +12,7 @@
         <th>город</th>
         <th>кол-во слотов</th>
         <th>уровень</th>
-        <th>Сервера</th>
+        <th>Сервера дата центра</th>
         <th>редактировать</th>
         <th>удалить</th>
     </tr>
@@ -27,6 +30,6 @@
         <td><a href="{{ url_for('data_delete', id=item.id) }}">удалить</a></td>
     </tr>
     {% endfor %}
-
 </table>
+<a class="btn btn-primary" href="{{ url_for('create_data') }}">Добавить дата центр</a>
 {% endblock %}

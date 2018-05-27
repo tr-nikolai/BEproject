@@ -1,13 +1,13 @@
 from flask import Flask, render_template, request, abort, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
-from forms import DataForm
+from forms import DataForm, ServerForm
 
 
 #  config
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///testes.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'DontTellAnyone'
+# app.config['SECRET_KEY'] = 'DontTellAnyone'
 db = SQLAlchemy(app)
 
 
@@ -44,9 +44,9 @@ class Server(db.Model):
 
 #  view
 @app.route('/', methods=['GET'])
-def index():
+def data():
     data = Data.query.all()
-    return render_template('index.html', data=data)
+    return render_template('data.html', data=data)
 
 
 @app.route('/data/<id>/edit/', methods=['GET', 'POST'])
@@ -61,7 +61,7 @@ def data_edit(id):
         form = DataForm(formdata=request.form, obj=data)
         form.populate_obj(data)
         db.session.commit()
-        return redirect(url_for('index'))
+        return redirect(url_for('data'))
     form = DataForm(obj=data)
     return render_template('data_edit.html', form=form)
 
@@ -73,7 +73,7 @@ def data_delete(id):
         abort(404)
     db.session.delete(data)
     db.session.commit()
-    return redirect(url_for('index'))
+    return redirect(url_for('data'))
 
 
 @app.route('/data/create', methods=['GET', 'POST'])
@@ -90,7 +90,7 @@ def create_data():
             db.session.commit()
         except:
             print('что-то не так')
-        return redirect(url_for('index'))
+        return redirect(url_for('data'))
     form = DataForm()
     return render_template('create_data.html', form=form)
 
@@ -101,12 +101,43 @@ def all_servers():
     return render_template('servers.html', servers=servers)
 
 
+@app.route('/servers/<id>/delete', methods=['GET'])
+def server_delete(id):
+    server = Server.query.filter_by(id=id).first()
+    if not server:
+        abort(404)
+    db.session.delete(server)
+    db.session.commit()
+    return redirect(url_for('servers_data', id=server.data_id))
+
+
 @app.route('/servers/<id>', methods=['GET'])
 def servers_data(id):
     servers = Server.query.filter_by(data_id=id)
     data = Data.query.filter_by(id=id).first()
     if servers:
         return render_template('servers.html', servers=servers)
+
+
+@app.route('/server/create', methods=['GET', 'POST'])
+def create_server():
+    if request.method == 'POST':
+        try:
+            data = Data.query.filter_by(id=request.form['data']).all()[0]
+        except:
+            info = 'Нет такого Дата центра'
+            return render_template('teh_info.html', info = info)
+        server = Server(name_server =  request.form['name_server'],
+                        manufacturer = request.form['manufacturer'],
+                        model_server = request.form['model_server'],
+                        serial_number = request.form['serial_number'],
+                        os = request.form['os'],
+                        data = data)
+        db.session.add(server)
+        db.session.commit()
+        return redirect(url_for('all_servers'))
+    form = ServerForm()
+    return render_template('create_server.html', form=form)
 
 
 if __name__ == '__main__':
