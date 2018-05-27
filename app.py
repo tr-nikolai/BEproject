@@ -57,7 +57,7 @@ def data_edit(id):
     data = Data.query.filter_by(id=id).first()
     if not data:
         abort(404)
-    if request.method == 'POST': #  принимаем достаем данные и перерисовываем страницу
+    if request.method == 'POST':
         form = DataForm(formdata=request.form, obj=data)
         form.populate_obj(data)
         db.session.commit()
@@ -79,7 +79,6 @@ def data_delete(id):
 @app.route('/data/create', methods=['GET', 'POST'])
 def create_data():
     if request.method == 'POST':
-        # print(request.form)
         try:
             data = Data(name_data=request.form['name_data'],
                         place_conutry = request.form['place_conutry'],
