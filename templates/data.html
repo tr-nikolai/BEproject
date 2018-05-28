@@ -26,6 +26,7 @@
           <span class="custom-control-indicator"></span>
           <span class="custom-control-description">По убыванию количества серверов</span>
         </label>
+
         <button type="submit" class="btn btn-primary">Сортировать</button>
     </div>
 </form>
@@ -34,7 +35,8 @@
 <hr>
 
 <h1> Список датацентров:</h1>
-<table class="table">
+<table>
+    <thead>
     <tr>
         <th>№</th>
         <th>имя</th>
@@ -42,24 +44,26 @@
         <th>город</th>
         <th>кол-во слотов</th>
         <th>уровень</th>
-        <th>Сервера дата центра</th>
+        <th>cервера датацентра</th>
         <th>редактировать</th>
         <th>удалить</th>
     </tr>
+    </thead>
+    <tbody>
     {% for item in data %}
     <tr>
-        <td>{{ item.id }}</td>
-        <td>{{ item.name_data }}</td>
-        <td>{{ item.place_conutry }}</td>
-        <td>{{ item.place_city}}</td>
-        <td>{{ item.slot_servers}}</td>
-        <td>{{ item.data_tier }}</td>
-        <td><a href="{{ url_for('servers_data', id=item.id) }}">сервера</a></td>
-        <!--<td><a href="/data/{{ item.id }}/edit">редактировать</a></td>-->
-        <td><a href="{{ url_for('data_edit', id=item.id) }}">редактировать</a></td>
-        <td><a class ='delete' href="{{ url_for('data_delete', id=item.id) }}">удалить</a></td>
+        <td data-label="№">{{ item.id }}</td>
+        <td data-label="имя">{{ item.name_data }}</td>
+        <td data-label="страна">{{ item.place_conutry }}</td>
+        <td data-label="город">{{ item.place_city}}</td>
+        <td data-label="кол-во слотов">{{ item.slot_servers}}</td>
+        <td data-label="уровень">{{ item.data_tier }}</td>
+        <td data-label="сервера датацентра"><a href="{{ url_for('servers_data', id=item.id) }}">сервера</a></td>
+        <td data-label="редактировать"><a href="{{ url_for('data_edit', id=item.id) }}">редактировать</a></td>
+        <td data-label="удалить"><a class ='delete' href="{{ url_for('data_delete', id=item.id) }}">удалить</a></td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>
 
 
