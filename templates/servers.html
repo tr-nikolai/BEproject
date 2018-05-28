@@ -3,11 +3,33 @@
 Серверы.
 {% endblock %}
 {% block content %}
+<hr>
+<form method="GET">
+    <div class="form-inline">
+        <label class="custom-control custom-radio">
+          <input id="radio1" name="radio" type="radio" class="custom-control-input" value="name"
+                 {% if request.args.get('radio')=='name' %} checked {% endif %}>
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description">По имени сервера</span>
+        </label>
+        <label class="custom-control custom-radio">
+          <input id="radio2" name="radio" type="radio" class="custom-control-input" value="manufac"
+          {% if request.args.get('radio')=='manufac' %} checked {% endif %}>
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description">По производителю</span>
+        </label>
+        <button type="submit" class="btn btn-primary">Сортировать</button>
+    </div>
+</form>
+
+<hr>
+<a class="btn btn-primary" href="{{ url_for('create_server') }}">Добавить сервер</a>
+<hr>
 <h1> Все серверы:</h1>
 <table class="table">
     <tr>
         <th>№</th>
-        <th>Название сервера</th>
+        <th>Имя сервера</th>
         <th>Производитель</th>
         <th>модель</th>
         <th>Серийный номер</th>
@@ -25,11 +47,10 @@
         <td>{{ item.model_server}}</td>
         <td>{{ item.serial_number}}</td>
         <td>{{ item.os }}</td>
-        <td><a href="{{ url_for('data_edit', id=item.data_id) }}">----- {{ item.data_id }} -----</a></td>
+        <td><a href="{{ url_for('data_edit', id=item.data_id) }}">-----{{ item.data_id }}-----</a></td>
         <td><a href="{{ url_for('server_edit', id=item.id) }}">Редактировать</a></td>
-        <td><a href="{{ url_for('server_delete', id=item.id) }}">Удалить</a></td>
+        <td><a class='delete' href="{{ url_for('server_delete', id=item.id) }}">Удалить</a></td>
     </tr>
     {% endfor %}
 </table>
-<a class="btn btn-primary" href="{{ url_for('create_server') }}">Добавить сервер</a>
 {% endblock %}

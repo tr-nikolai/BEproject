@@ -20,7 +20,7 @@ class Data(db.Model):
     slot_servers = db.Column(db.Integer, nullable=False)
     data_tier = db.Column(db.Integer, nullable=False)
 
-    servers = db.relationship('Server', backref='data', cascade='all, delete-orphan', lazy='dynamic') # у серверов обращаться по имени data server = Servers(name='c3p0', data=anthony) где anthony обьект Data
+    servers = db.relationship('Server', backref='data', cascade='all, delete-orphan', lazy='dynamic')
 
     def __repr__(self):
         return  str(self.id)
@@ -45,7 +45,16 @@ class Server(db.Model):
 #  view
 @app.route('/', methods=['GET'])
 def data():
-    data = Data.query.all()
+    radio = request.args.get('radio')
+    q = request.args.get('q')
+    if q:
+        data = Data.query.filter(Data.name_data.contains(q)).all()
+    elif radio == 'up':
+        data = Data.query.order_by(Data.slot_servers).all()
+    elif radio == 'down':
+        data = Data.query.order_by(Data.slot_servers).all()[::-1]
+    else:
+        data = Data.query.all()
     return render_template('data.html', data=data)
 
 
@@ -96,7 +105,13 @@ def create_data():
 
 @app.route('/servers', methods=['GET'])
 def all_servers():
-    servers = Server.query.all()
+    radio = request.args.get('radio')
+    if radio == 'name':
+        servers = Server.query.order_by(Server.name_server).all()
+    elif radio == 'manufac':
+        servers = Server.query.order_by(Server.manufacturer).all()
+    else:
+        servers = Server.query.all()
     return render_template('servers.html', servers=servers)
 
 
@@ -113,9 +128,13 @@ def server_delete(id):
 @app.route('/servers/<id>', methods=['GET'])
 def servers_data(id):
     servers = Server.query.filter_by(data_id=id)
-    data = Data.query.filter_by(id=id).first()
-    if servers:
-        return render_template('servers.html', servers=servers)
+    radio = request.args.get('radio')
+    # print(servers.order_by(Server.name_server).all())
+    if radio == 'name':
+        servers = servers.order_by(Server.name_server).all()
+    elif radio == 'manufac':
+        servers = servers.order_by(Server.manufacturer).all()
+    return render_template('servers.html', servers=servers)
 
 
 @app.route('/server/create', methods=['GET', 'POST'])

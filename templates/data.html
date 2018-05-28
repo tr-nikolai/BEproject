@@ -3,7 +3,37 @@
 Дата центры.
 {% endblock %}
 {% block content %}
-<h1> Все дата центры:</h1>
+
+<hr>
+<form method="GET">
+    <div class="form-inline">
+        <input type="text" class="form-control" placeholder="Поиск по имени" name="q" value="{{ request.args.get('q', '')}}">
+        <button type="submit" class="btn btn-primary">Поиск</button>
+    </div>
+</form>
+<hr>
+<form method="GET">
+    <div class="form-inline">
+        <label class="custom-control custom-radio">
+          <input id="radio1" name="radio" type="radio" class="custom-control-input" value="up"
+                 {% if request.args.get('radio')=='up' %} checked {% endif %}>
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description">По возрастанию количества серверов</span>
+        </label>
+        <label class="custom-control custom-radio">
+          <input id="radio2" name="radio" type="radio" class="custom-control-input" value="down"
+          {% if request.args.get('radio')=='down' %} checked {% endif %}>
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description">По убыванию количества серверов</span>
+        </label>
+        <button type="submit" class="btn btn-primary">Сортировать</button>
+    </div>
+</form>
+<hr>
+<a class="btn btn-primary" href="{{ url_for('create_data') }}">Добавить датацентр</a>
+<hr>
+
+<h1> Список датацентров:</h1>
 <table class="table">
     <tr>
         <th>№</th>
@@ -31,5 +61,6 @@
     </tr>
     {% endfor %}
 </table>
-<a class="btn btn-primary" href="{{ url_for('create_data') }}">Добавить дата центр</a>
+
+
 {% endblock %}
