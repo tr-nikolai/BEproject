@@ -3,11 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from forms import DataForm, ServerForm
 
 
-#  config
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///testes.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# app.config['SECRET_KEY'] = 'DontTellAnyone'
+app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
 
 
@@ -183,4 +181,4 @@ def server_edit(id):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
