@@ -6,6 +6,14 @@
 <hr>
 <form method="GET">
     <div class="form-inline">
+        <input type="text" class="form-control" placeholder="Поиск по имени" name="q" value="{{ request.args.get('q', '')}}">
+        <button type="submit" class="btn btn-primary">Поиск</button>
+    </div>
+</form>
+<hr>
+
+<form method="GET">
+    <div class="custom-controls-stacked">
         <label class="custom-control custom-radio">
           <input id="radio1" name="radio" type="radio" class="custom-control-input" value="name"
                  {% if request.args.get('radio')=='name' %} checked {% endif %}>
@@ -49,7 +57,7 @@
         <td data-label="модель">{{ item.model_server}}</td>
         <td data-label="серийный номер">{{ item.serial_number}}</td>
         <td data-label="ОС">{{ item.os }}</td>
-        <td data-label="№ дц"><a href="{{ url_for('data_edit', id=item.data_id) }}">--{{ item.data_id }}--</a></td>
+        <td data-label="№ дц"><a href="{{ url_for('data_edit', id=item.data_id) }}">№ {{ item.data_id }}</a></td>
         <td data-label="редактировать"><a href="{{ url_for('server_edit', id=item.id) }}">Изменить</a></td>
         <td data-label="удалить"><a class='delete' href="{{ url_for('server_delete', id=item.id) }}">Удалить</a></td>
     </tr>

@@ -1,3 +1,6 @@
+body {
+    word-wrap: break-word;
+}
 table {
 border: 1px solid #ccc;
 width: 100%;
@@ -23,7 +26,7 @@ font-size: 14px;
 letter-spacing: 1px;
 }
 
-@media screen and (max-width: 980px) {
+@media screen and (max-width: 768px) {
 
     table {
       border: 0;

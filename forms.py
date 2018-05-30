@@ -1,5 +1,4 @@
 from wtforms import Form, StringField, SelectField, IntegerField
-from wtforms.validators import Required, InputRequired, DataRequired
 
 
 class DataForm(Form):

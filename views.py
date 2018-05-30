@@ -2,9 +2,12 @@ from flask import request, render_template, abort, redirect, url_for
 from app import db, app
 from models import Data, Server
 from forms import DataForm, ServerForm
+from flask_security import login_required
 
 
+#  DATA CENTER view
 @app.route('/', methods=['GET'])
+@login_required
 def data():
     radio = request.args.get('radio')
     q = request.args.get('q')
@@ -19,10 +22,9 @@ def data():
     return render_template('data.html', data=data)
 
 
-@app.route('/data/<id>/edit/', methods=['GET', 'POST'])
-
 
 @app.route('/data/<id>/edit/', methods=['GET', 'POST'])
+@login_required
 def data_edit(id):
     data = Data.query.filter_by(id=id).first()
     if not data:
@@ -37,6 +39,7 @@ def data_edit(id):
 
 
 @app.route('/data/<id>/delete/', methods=['GET', 'POST'])
+@login_required
 def data_delete(id):
     data = Data.query.filter_by(id=id).first()
     if not data:
@@ -46,7 +49,9 @@ def data_delete(id):
     return redirect(url_for('data'))
 
 
+#  SERVERS view
 @app.route('/data/create', methods=['GET', 'POST'])
+@login_required
 def create_data():
     if request.method == 'POST':
         try:
@@ -65,9 +70,13 @@ def create_data():
 
 
 @app.route('/servers', methods=['GET'])
+@login_required
 def all_servers():
     radio = request.args.get('radio')
-    if radio == 'name':
+    q = request.args.get('q')
+    if q:
+        servers = Server.query.filter(Server.name_server.contains(q)).all()
+    elif radio == 'name':
         servers = Server.query.order_by(Server.name_server).all()
     elif radio == 'manufac':
         servers = Server.query.order_by(Server.manufacturer).all()
@@ -77,6 +86,7 @@ def all_servers():
 
 
 @app.route('/servers/<id>/delete', methods=['GET'])
+@login_required
 def server_delete(id):
     server = Server.query.filter_by(id=id).first()
     if not server:
@@ -87,10 +97,14 @@ def server_delete(id):
 
 
 @app.route('/servers/<id>', methods=['GET'])
+@login_required
 def servers_data(id):
     servers = Server.query.filter_by(data_id=id)
     radio = request.args.get('radio')
-    if radio == 'name':
+    q = request.args.get('q')
+    if q:
+        servers = servers.filter(Server.name_server.contains(q)).all()
+    elif radio == 'name':
         servers = servers.order_by(Server.name_server).all()
     elif radio == 'manufac':
         servers = servers.order_by(Server.manufacturer).all()
@@ -98,6 +112,7 @@ def servers_data(id):
 
 
 @app.route('/server/create', methods=['GET', 'POST'])
+@login_required
 def create_server():
     if request.method == 'POST':
         try:
@@ -119,6 +134,7 @@ def create_server():
 
 
 @app.route('/server/<id>/edit/', methods=['GET', 'POST'])
+@login_required
 def server_edit(id):
     server = Server.query.filter_by(id=id).first()
     if not server:

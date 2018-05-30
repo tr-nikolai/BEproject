@@ -13,7 +13,7 @@
 </form>
 <hr>
 <form method="GET">
-    <div class="form-inline">
+    <div class="custom-controls-stacked">
         <label class="custom-control custom-radio">
           <input id="radio1" name="radio" type="radio" class="custom-control-input" value="up"
                  {% if request.args.get('radio')=='up' %} checked {% endif %}>
@@ -45,7 +45,7 @@
         <th>кол-во слотов</th>
         <th>уровень</th>
         <th>cервера датацентра</th>
-        <th>редактировать</th>
+        <th>Изменить</th>
         <th>удалить</th>
     </tr>
     </thead>
@@ -59,7 +59,7 @@
         <td data-label="кол-во слотов">{{ item.slot_servers}}</td>
         <td data-label="уровень">{{ item.data_tier }}</td>
         <td data-label="сервера датацентра"><a href="{{ url_for('servers_data', id=item.id) }}">сервера</a></td>
-        <td data-label="редактировать"><a href="{{ url_for('data_edit', id=item.id) }}">редактировать</a></td>
+        <td data-label="редактировать"><a href="{{ url_for('data_edit', id=item.id) }}">изменить</a></td>
         <td data-label="удалить"><a class ='delete' href="{{ url_for('data_delete', id=item.id) }}">удалить</a></td>
     </tr>
     {% endfor %}
