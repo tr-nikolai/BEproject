@@ -7,12 +7,54 @@
 <div class="col-md-6">
     <h1>Добавить сервер:</h1>
     <form action="{{ url_for('create_server') }}" method="POST">
-        {% for field in form %}
+        {{ form.csrf_token }}
         <div class="form-group">
-        {{ field.label(class='control-label' ) }}
-        {{ field(class='form-control', required='required') }}
+            {% for error in form.name_server.errors %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endfor %}
+        {{ form.name_server.label(class='control-label' ) }}
+        {{ form.name_server(class='form-control') }}
         </div>
-        {% endfor %}
+
+        <div class="form-group">
+            {% for error in form.manufacturer.errors %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endfor %}
+        {{ form.manufacturer.label(class='control-label' ) }}
+        {{ form.manufacturer(class='form-control') }}
+        </div>
+
+        <div class="form-group">
+            {% for error in form.model_server.errors %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endfor %}
+        {{ form.model_server.label(class='control-label' ) }}
+        {{ form.model_server(class='form-control') }}
+        </div>
+
+        <div class="form-group">
+            {% for error in form.serial_number.errors %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endfor %}
+        {{ form.serial_number.label(class='control-label' ) }}
+        {{ form.serial_number(class='form-control') }}
+        </div>
+
+        <div class="form-group">
+            {% for error in form.os.errors %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endfor %}
+        {{ form.os.label(class='control-label' ) }}
+        {{ form.os(class='form-control') }}
+        </div>
+
+        <div class="form-group">
+            {% for error in form.data.errors %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endfor %}
+        {{ form.data.label(class='control-label' ) }}
+        {{ form.data(class='form-control') }}
+        </div>
         <button type="submit" class="btn btn-primary"> Создать</button>
     </form>
 </div>

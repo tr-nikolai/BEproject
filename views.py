@@ -54,7 +54,7 @@ def data_delete(id):
 @login_required
 def create_data():
     form = DataForm()
-    if form.validate_on_submit():#request.method == 'POST':
+    if form.validate_on_submit():
         data = Data(name_data=request.form['name_data'],
                     place_conutry = request.form['place_conutry'],
                     place_city = request.form['place_city'],
@@ -113,22 +113,22 @@ def servers_data(id):
 @app.route('/server/create', methods=['GET', 'POST'])
 @login_required
 def create_server():
-    if request.method == 'POST':
+    form = ServerForm()
+    if form.validate_on_submit():
         try:
             data = Data.query.filter_by(id=request.form['data']).all()[0]
         except:
             info = 'Нет такого Дата центра'
             return render_template('teh_info.html', info = info)
-        server = Server(name_server =  request.form['name_server'],
-                        manufacturer = request.form['manufacturer'],
-                        model_server = request.form['model_server'],
-                        serial_number = request.form['serial_number'],
-                        os = request.form['os'],
-                        data = data)
+        server = Server(name_server=request.form['name_server'],
+                        manufacturer=request.form['manufacturer'],
+                        model_server=request.form['model_server'],
+                        serial_number=request.form['serial_number'],
+                        os=request.form['os'],
+                        data=data)
         db.session.add(server)
         db.session.commit()
         return redirect(url_for('all_servers'))
-    form = ServerForm()
     return render_template('create_server.html', form=form)
 
 
