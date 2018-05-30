@@ -53,19 +53,18 @@ def data_delete(id):
 @app.route('/data/create', methods=['GET', 'POST'])
 @login_required
 def create_data():
-    if request.method == 'POST':
-        try:
-            data = Data(name_data=request.form['name_data'],
-                        place_conutry = request.form['place_conutry'],
-                        place_city = request.form['place_city'],
-                        slot_servers = request.form['slot_servers'],
-                        data_tier = request.form['data_tier'])
-            db.session.add(data)
-            db.session.commit()
-        except:
-            print('что-то не так')
-        return redirect(url_for('data'))
     form = DataForm()
+    if form.validate_on_submit():#request.method == 'POST':
+        data = Data(name_data=request.form['name_data'],
+                    place_conutry = request.form['place_conutry'],
+                    place_city = request.form['place_city'],
+                    slot_servers = request.form['slot_servers'],
+                    data_tier = request.form['data_tier'])
+        db.session.add(data)
+        db.session.commit()
+        print('что-то не так')
+        return redirect(url_for('data'))
+
     return render_template('create_data.html', form=form)
 
 
