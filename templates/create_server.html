@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="col-md-6">
-    <h1>Добавить сервер:</h1>
+    <h1>{{ title }} сервер:</h1>
     <form action="{{ url_for('create_server') }}" method="POST">
         {{ form.csrf_token }}
         <div class="form-group">
@@ -55,7 +55,7 @@
         {{ form.data.label(class='control-label' ) }}
         {{ form.data(class='form-control') }}
         </div>
-        <button type="submit" class="btn btn-primary"> Создать</button>
+        <button type="submit" class="btn btn-primary">Отправить</button>
     </form>
 </div>
 {% endblock %}

@@ -35,7 +35,7 @@ def data_edit(id):
         db.session.commit()
         return redirect(url_for('data'))
     form = DataForm(obj=data)
-    return render_template('data_edit.html', form=form)
+    return render_template('create_data.html', form=form, title='Изменить' )
 
 
 @app.route('/data/<id>/delete/', methods=['GET', 'POST'])
@@ -65,7 +65,7 @@ def create_data():
         print('что-то не так')
         return redirect(url_for('data'))
 
-    return render_template('create_data.html', form=form)
+    return render_template('create_data.html', form=form, title='Добавить')
 
 
 @app.route('/servers', methods=['GET'])
@@ -129,16 +129,17 @@ def create_server():
         db.session.add(server)
         db.session.commit()
         return redirect(url_for('all_servers'))
-    return render_template('create_server.html', form=form)
+    return render_template('create_server.html', form=form, title='Добавить')
 
 
 @app.route('/server/<id>/edit/', methods=['GET', 'POST'])
 @login_required
 def server_edit(id):
     server = Server.query.filter_by(id=id).first()
+    form = ServerForm(obj=server)
     if not server:
         abort(404)
-    if request.method == 'POST':
+    if form.validate_on_submit():
         try:
             data = Data.query.filter_by(id=request.form['data']).all()[0]
         except IndexError:
@@ -153,5 +154,4 @@ def server_edit(id):
         server.data = data
         db.session.commit()
         return redirect(url_for('all_servers'))
-    form = ServerForm(obj=server)
-    return render_template('server_edit.html', form=form)
+    return render_template('create_server.html', form=form, title='Изменить')
